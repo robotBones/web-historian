@@ -30,7 +30,7 @@ exports.initialize = function(pathsObj){
 
 var sitesFile = path.join(__dirname, '../archives/sites.txt');
 
-exports.readListOfUrls = function(website){
+exports.readListOfUrls = function(callback){
 // read every line of file
   var websiteList;
   var myFileAsText;
@@ -39,49 +39,46 @@ exports.readListOfUrls = function(website){
       myFileAsText = data.toString();
       websiteList = myFileAsText.split("\n");
     }
-    exports.isUrlInList(websiteList, website);
+    callback(websiteList); // array
   });
 
 };
 
 exports.isUrlInList = function(list, website){
-  if(!_(list).contains(website)){
-    exports.addUrlToList(website);
-  } else {
-    exports.isURLArchived(website);
-  }
-
+  return _(list).contains(website);
 };
 
 exports.addUrlToList = function(website){
   // add novel POSTed website
-  fs.appendFile(sitesFile, "\n" + website);
+  fs.appendFile(sitesFile, '\n'+ website + '\n');
 };
 
 // this needs to be rewritten. we dont have a response objectg
-exports.redirect = function(filename){
-  console.log("dirname:",__dirname, "filename: ", filename);
-  var staticLoading = path.join(__dirname, filename);
-  fs.readFile(staticLoading, function(err, data){
-    if (err) throw err;
+// exports.redirect = function(filename){
+//   console.log("dirname:",__dirname, "filename: ", filename);
+//   var staticLoading = path.join(__dirname, filename);
+//   fs.readFile(staticLoading, function(err, data){
+//     if (err) throw err;
+//     res.writeHead(200, headers);
+//     res.write(data);
+//     console.log("redirecting from isURLArchived");
+//     res.end();
+//   });
+// };
+
+exports.fetchArchive = function(website) {
+  var archivedSite = path.join(exports.path['archivedSites'], website);
+  fs.readFile(archivedSite, function(err, data){
+    if(err) throw err;
     res.writeHead(200, headers);
     res.write(data);
-    console.log("redirecting from isURLArchived");
-    res.end();
+    res
   });
-};
-
+}
 exports.isURLArchived = function(website){
   var archived = path.join(exports.path['archivedSites'],website); // this returns a path as a string
-  console.log("archived: ", archived);
   fs.exists(archived, function isURLArchivedCB(exists){
-    console.log("exists", exists);
-    if(exists){
-      console.log("website is indeed archived", archived);
-      exports.redirect(archived);
-    } else {
-      console.log("WTF");
-    }
+    return (exists)
   });
 };
 

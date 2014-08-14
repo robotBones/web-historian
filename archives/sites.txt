@@ -1,5 +1,2 @@
 
 www.google.com
-
-www.yahoo.com
-www.example.com
