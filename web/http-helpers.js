@@ -24,5 +24,28 @@ exports.serveAssets = function(res, asset, callback) {
     }
   });
 };
+///////////////////////////////////////////////
+fs.readFile(archive.paths.siteAssets + asset, function(err, contents) {
+  if (!err && contents) {
+    sendResponse(res, contents);
+    return;
+  }
+
+fs.readFile(archive,paths.archivedSites + asset, function(err, contents) {
+  if (!err && contents) {
+    sendResponse(res, contents);
+    return;
+  }
+  
+  if(cb) {
+    cb();
+    return;
+  }
+
+  send404(res);
+
+  });
+});
+};
 
 // As you progress, keep thinking about what helper functions you can put here!

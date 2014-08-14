@@ -50,21 +50,8 @@ exports.isUrlInList = function(list, website){
 
 exports.addUrlToList = function(website){
   // add novel POSTed website
-  fs.appendFile(sitesFile, '\n'+ website + '\n');
+  fs.appendFile(sitesFile, website + '\n');
 };
-
-// this needs to be rewritten. we dont have a response objectg
-// exports.redirect = function(filename){
-//   console.log("dirname:",__dirname, "filename: ", filename);
-//   var staticLoading = path.join(__dirname, filename);
-//   fs.readFile(staticLoading, function(err, data){
-//     if (err) throw err;
-//     res.writeHead(200, headers);
-//     res.write(data);
-//     console.log("redirecting from isURLArchived");
-//     res.end();
-//   });
-// };
 
 exports.fetchArchive = function(website) {
   var archivedSite = path.join(exports.path['archivedSites'], website);
@@ -84,4 +71,17 @@ exports.isURLArchived = function(website){
 
 // assuming this is the function to archive websites on the list of urls.
 exports.downloadUrls = function(){
+  exports.readListOfUrls(function(data) {
+    var siteArray = data.split('\n');
+
+    _.each(siteArray, function(site) {
+      if (site) {
+        exports.downloadSite(siteArray[i]);
+      }
+    })
+  })
 };
+
+exports.downloadSite = function(url) {
+  requestClient('http://' + url).pipe(fs.createWriteStream(exports.paths.archivedSites + '/' + url));
+}
