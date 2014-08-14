@@ -24,16 +24,6 @@ exports.initialize = function(pathsObj){
   });
 };
 
-// redirect helper
-exports.redirect = function(filename){
-  var staticLoading = path.join(__dirname, filename);
-  httpHelp.serveAssets(res, staticLoading, function(data){
-    res.writeHead(200, headers);
-    res.write(data);
-    console.log("redirecting");
-    res.end();
-  });
-};
 
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
@@ -68,9 +58,24 @@ exports.addUrlToList = function(website){
   fs.appendFile(sitesFile, "\n" + website);
 };
 
+// this needs to be rewritten. we dont have a response objectg
+exports.redirect = function(filename){
+  console.log("dirname:",__dirname, "filename: ", filename);
+  var staticLoading = path.join(__dirname, filename);
+  fs.readFile(staticLoading, function(err, data){
+    if (err) throw err;
+    res.writeHead(200, headers);
+    res.write(data);
+    console.log("redirecting from isURLArchived");
+    res.end();
+  });
+};
+
 exports.isURLArchived = function(website){
   var archived = path.join(exports.path['archivedSites'],website); // this returns a path as a string
+  console.log("archived: ", archived);
   fs.exists(archived, function isURLArchivedCB(exists){
+    console.log("exists", exists);
     if(exists){
       console.log("website is indeed archived", archived);
       exports.redirect(archived);

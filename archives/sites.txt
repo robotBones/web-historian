@@ -3,12 +3,3 @@ www.google.com
 
 www.yahoo.com
 www.example.com
-function (urls){
-      resultArray = urls;
-    }
-function (urls){
-      resultArray = urls;
-    }
-function (urls){
-      resultArray = urls;
-    }

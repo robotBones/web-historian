@@ -43,8 +43,8 @@ var redirect = function(filename){
       console.log('post: ', post.url);
       // work on this
       archive.readListOfUrls(post.url);
+      archive.redirect(post.url);
     });
-    archive.redirect('./public/loading.html');
   };
 
   var optionsResponse = function(){
