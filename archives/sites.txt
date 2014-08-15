@@ -1,2 +1,6 @@
-
-www.google.com
+www.io9.com
+www.nytimes.com
+www.facebook.com
+www.gizmodo.com
+www.wired.com
+www.twitter.com

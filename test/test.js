@@ -90,7 +90,8 @@ describe("html fetcher helpers", function(){
   it("should have a 'readListOfUrls' function", function(done){
     var urlArray = ["example1.com", "example2.com"];
     var resultArray;
-
+    console.log(archive.paths.list);
+    console.log(urlArray.join("\n"));
     fs.writeFileSync(archive.paths.list, urlArray.join("\n"));
     archive.readListOfUrls(function(urls){
       resultArray = urls;
@@ -99,6 +100,7 @@ describe("html fetcher helpers", function(){
     waitForThen(
       function() { return resultArray; },
       function(){
+        console.log("result array",resultArray, "test array", urlArray);
         expect(resultArray).to.deep.equal(urlArray);
         done();
     });

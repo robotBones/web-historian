@@ -3,6 +3,7 @@ var path = require('path');
 var _ = require('underscore');
 var lazy = require('lazy');
 var httpHelp = require('../web/http-helpers.js');
+var requestClient = require('request');
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -35,6 +36,7 @@ exports.readListOfUrls = function(callback){
   var websiteList;
   var myFileAsText;
   fs.readFile(sitesFile, function readFileCB(error, data){
+    if(error) throw error;
     if(data){
       myFileAsText = data.toString();
       websiteList = myFileAsText.split("\n");
@@ -53,19 +55,19 @@ exports.addUrlToList = function(website){
   fs.appendFile(sitesFile, website + '\n');
 };
 
-exports.fetchArchive = function(website) {
-  var archivedSite = path.join(exports.path['archivedSites'], website);
-  fs.readFile(archivedSite, function(err, data){
-    if(err) throw err;
-    res.writeHead(200, headers);
-    res.write(data);
-    res
-  });
-}
-exports.isURLArchived = function(website){
-  var archived = path.join(exports.path['archivedSites'],website); // this returns a path as a string
+// exports.fetchArchive = function(website) {
+//   var archivedSite = path.join(exports.paths['archivedSites'], website);
+//   fs.readFile(archivedSite, function(err, data){
+//     if(err) throw err;
+//     res.writeHead(200, headers);
+//     res.write(data);
+//     res
+//   });
+// }
+exports.isURLArchived = function(website, callback){
+  var archived = path.join(exports.paths['archivedSites'],website); // this returns a path as a string
   fs.exists(archived, function isURLArchivedCB(exists){
-    return (exists)
+    callback(exists);
   });
 };
 
